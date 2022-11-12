@@ -4,18 +4,15 @@ import Colors from "../../Data/Colores"
 import { MaterialIcons,FontAwesome5,Ionicons} from '@expo/vector-icons';
 import {useEffect,useState} from "react"
 
-import firebase from "../../Data/DataBase/firebase"
-import 'firebase/auth';
-
-function LoginScreen ({navigation})
+function Ciats ({navigation})
 {
-    const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('')
+    const [estado,setEstado] = useState('')
+    const [Citas,SetCitas] = useState('')
     
-    const handleSignUp=()=>
+    const handleCitas=()=>
     {
       firebase.auth.createUserWithEmailAndPassword(email,password)
-      .then(userCredentials =>{
+      .then(citas=>{
         const user = userCredentials.user;
         alert('Usuario Registrado')
         navigation.navigate('Perfil')
@@ -23,17 +20,7 @@ function LoginScreen ({navigation})
       .catch(error =>alert(error.message))
     }
     
-    const handleLogin=()=>
-    {
-      firebase.auth.signInWithEmailAndPassword(email,password)
-      .then(userCredentials =>{
-        const user = userCredentials.user;
-        alert('Bienvenido')
-        navigation.navigate('Bottom')
-      })
-      .catch(error =>alert(error.message))
-    }
-
+ 
 
 
   return (
