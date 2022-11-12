@@ -1,52 +1,125 @@
-import {AppRegistry} from 'react-native';
-import React from "react";
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
-const DATA = [
+import {Button,Input,Heading,Text,Image,View,Box,VStack,Pressable} from 'native-base'
+import React from 'react'
+import Colors from "../../Data/Colores"
+import { MaterialIcons,FontAwesome5,Ionicons} from '@expo/vector-icons';
+import {useEffect,useState} from "react"
+
+import firebase from "../../Data/DataBase/firebase"
+import 'firebase/auth';
+
+function LoginScreen ({navigation})
 {
-id: '1',
-title: 'Toyota',
-},
-{
-id: '2',
-title: 'Mazda',
-},
-{
-id: '3',
-title: 'Mitsubishi',
-},
-];
-const Item = ({ title }) => (
-<View style={styles.item}>
-<Text style={styles.title}>{title}</Text>
-</View>
-);
-const App = () => {
-const renderItem = ({ item }) => (
-<Item title={item.title} />
-);
-return (
-<SafeAreaView style={styles.container}>
-<FlatList
-data={DATA}
-renderItem={renderItem}
-keyExtractor={item => item.id}
-/>
-</SafeAreaView> 
-);
+    const [email,setEmail] = useState('')
+    const [password,setPassword] = useState('')
+    
+    const handleSignUp=()=>
+    {
+      firebase.auth.createUserWithEmailAndPassword(email,password)
+      .then(userCredentials =>{
+        const user = userCredentials.user;
+        alert('Usuario Registrado')
+        navigation.navigate('Perfil')
+      })
+      .catch(error =>alert(error.message))
+    }
+    
+    const handleLogin=()=>
+    {
+      firebase.auth.signInWithEmailAndPassword(email,password)
+      .then(userCredentials =>{
+        const user = userCredentials.user;
+        alert('Bienvenido')
+        navigation.navigate('Bottom')
+      })
+      .catch(error =>alert(error.message))
+    }
+
+
+
+  return (
+    <Box flex={1} bg={Colors.backgroundColor} >
+      <Image flex={1} alt="logo" 
+       resiseMode="cover"
+       size="lg"
+       w="full"
+       />
+      {/*Mantiene los items del login en el centro*/}
+      <Box 
+        w="full"
+        h="full" 
+        position="absolute" 
+        top ="-150"
+        px="30" 
+        justifyContent="center"
+        marginTop="40"
+      >
+      <Heading 
+        color={Colors.blanco} fontSize="30" fontWeight='bold'   textAlign='center' >HEALTH PLUS
+      </Heading>
+      <Image alt="logo" size="130" marginRight="auto" marginLeft="auto"
+       source ={require("../../Assets/logo.png")}
+      />
+      <VStack space={5}>
+        
+        {/*INPUT PARA correos*/}
+        <Input
+          InputLeftElement= {<MaterialIcons name="email" size={30} color={Colors.underline} /> }
+          variant="underline"
+          placeholder="correo@gmail.com"
+          w="90%"
+          fontWeight='bold'
+          fontSize="25"
+          marginTop="30" 
+          pl={2}
+          color={Colors.blanco}
+          borderBottomColor={Colors.underline}
+          borderBottomWidth="2"
+
+          value={email}
+          onChangeText={text => setEmail(text)}
+        />
+         {/*INPUT PARA CONTARASEÑA*/}
+         <Input
+          InputLeftElement= {<FontAwesome5 name="key" size={30} color={Colors.underline}  /> }
+          variant="underline"
+          type="password"
+          placeholder="••••••••••"
+          marginTop="30" 
+          pl={5}
+          w="90%"
+          fontWeight='bold'
+          fontSize="25"
+          color={Colors.underline}
+           borderBottomColor={Colors.underline}
+          borderBottomWidth="2"
+
+          value={password}
+          onChangeText={text => setPassword(text)}
+        />
+      </VStack>
+
+      <Button 
+        my={30}
+        w="40%" 
+        rounded={50}
+        marginRight="auto" marginLeft="auto"
+        fontWeight='bold'
+        bg={Colors.secondaryColor}
+        
+        onPress={handleLogin}
+        >
+        LOGIN
+      </Button>
+
+      <Pressable>
+        <Text ml="auto" mr="auto" underline color={Colors.blanco} onPress={handleSignUp} >
+         Crear Cuenta 
+        </Text>
+      </Pressable>
+    </Box>
+
+    </Box>
+  );
 }
-const styles = StyleSheet.create({
-container: {
-flex: 1,
-marginTop: StatusBar.currentHeight || 0,
-},
-item: {
-backgroundColor: '#f9c2ff',
-padding: 20,
-marginVertical: 8,
-marginHorizontal: 16,
-},
-title: {
-fontSize: 32,
-},
-});
-AppRegistry.registerComponent("cars", () => App);
+
+export default LoginScreen; 
