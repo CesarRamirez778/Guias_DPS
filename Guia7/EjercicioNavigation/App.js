@@ -1,52 +1,33 @@
-import {AppRegistry} from 'react-native';
-import React from "react";
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
-const DATA = [
-{
-id: '1',
-title: 'Toyota',
-},
-{
-id: '2',
-title: 'Mazda',
-},
-{
-id: '3',
-title: 'Mitsubishi',
-},
-];
-const Item = ({ title }) => (
-<View style={styles.item}>
-<Text style={styles.title}>{title}</Text>
-</View>
-);
-const App = () => {
-const renderItem = ({ item }) => (
-<Item title={item.title} />
-);
-return (
-<SafeAreaView style={styles.container}>
-<FlatList
-data={DATA}
-renderItem={renderItem}
-keyExtractor={item => item.id}
-/>
-</SafeAreaView> 
-);
+import * as React from 'react';
+import {NativeBaseProvider,StatusBar} from "native-base";
+import {NavigationContainer} from "@react-navigation/native"
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from "./VISTAS/screens/LoginScreen"
+import RegisterScreen from "./VISTAS/screens/RegisterScreen"
+import PerfilScreen from "./VISTAS/screens/PerfilScreen"
+import BottomNav from "./components/NAVIGATION/BottomNav"
+import HomeScreen from "./VISTAS/screens/HomeScreen"
+
+
+const Stack = createNativeStackNavigator();
+export default function App(){
+ return (
+    <NativeBaseProvider>
+      <NavigationContainer>
+        <StatusBar hidden={true}/>
+          <Stack.Navigator 
+            initialRouteName="Login" screenOptions={{
+            headerShown:false,}}>
+
+            <Stack.Screen name="Login" component={LoginScreen} / >
+            <Stack.Screen name="Register" component={RegisterScreen} / >
+            <Stack.Screen name="Perfil" component={PerfilScreen} / > 
+            <Stack.Screen name="Bottom" component={BottomNav} / >
+            <Stack.Screen name="Home" component={HomeScreen} / >
+
+          </Stack.Navigator >
+      </NavigationContainer>
+    </NativeBaseProvider>
+  );
+
 }
-const styles = StyleSheet.create({
-container: {
-flex: 1,
-marginTop: StatusBar.currentHeight || 0,
-},
-item: {
-backgroundColor: '#f9c2ff',
-padding: 20,
-marginVertical: 8,
-marginHorizontal: 16,
-},
-title: {
-fontSize: 32,
-},
-});
-AppRegistry.registerComponent("cars", () => App);
